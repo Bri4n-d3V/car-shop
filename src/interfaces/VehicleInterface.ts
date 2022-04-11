@@ -6,7 +6,6 @@ const VehicleSchema = z.object({
   color: z.string().min(3),
   status: z.boolean().optional(),
   buyValue: z.number().int(),
-
 });
 
 type Vehicle = z.infer<typeof VehicleSchema>;
