@@ -28,15 +28,20 @@ export abstract class MongoController<T> {
     res: Response<T | ResponseError>,
   ): Promise<typeof res | void>;
 
-  read = async (
+  public read = async (
     _req: Request,
     res: Response<T[] | ResponseError>,
   ): Promise<typeof res> => {
     try {
-      const objs = await this.service.read();
-      return res.json(objs);
+      const result = await this.service.read();
+      return res.json(result);
     } catch (err) {
       return res.status(500).json({ error: this.errors.internal });
     }
   };
+
+  public abstract readOne(
+    req: Request<{ id: string }>,
+    res: Response<T | ResponseError | null>,
+  ): Promise<typeof res>;
 }

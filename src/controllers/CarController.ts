@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import {
   MongoController,
   RequestWithBody,
@@ -32,7 +32,7 @@ export default class CarController extends MongoController<Car> {
       if (!result) {
         return res.status(500).json({ error: this.errors.internal });
       }
-  
+
       if ('error' in result) {
         return res.status(400).json(result);
       }
@@ -41,5 +41,25 @@ export default class CarController extends MongoController<Car> {
     } catch (err) {
       return res.status(500).json({ error: this.errors.internal });
     }
+  };
+
+  public readOne = async (
+    req: Request<{ id: string }>,
+    res: Response<Car | ResponseError | null>,
+  ): Promise<typeof res> => {
+    const { id } = req.params;
+    if (id.length !== 24) {
+      return res.status(400).json({
+        error: 'Id must have 24 hexadecimal characters',
+      });
+    }
+    const result = await this.service.readOne(id);
+    if (!result) {
+      return res.status(404).json({ error: this.errors.notFound });
+    }
+    if ('error' in result) {
+      return res.status(400).json(result);
+    }
+    return res.status(200).json(result);
   };
 }

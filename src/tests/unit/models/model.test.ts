@@ -29,4 +29,16 @@ describe('CarModel', (): void => {
       expect(car).to.be.deep.equal(carListMock);
     })
   })
+
+  describe('#readOne', (): void => {
+    before(() => Sinon.stub(carModel.model, 'findOne').resolves(carMock as any));
+
+    after((): void => Sinon.restore());
+
+    it('return a car by id', async (): Promise<void> => {
+      const car = await carModel.readOne('4edd40c86762e0fb12000003');
+
+      expect(car).to.be.deep.equal(carMock);
+    })
+  })
 })

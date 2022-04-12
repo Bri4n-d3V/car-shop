@@ -21,4 +21,15 @@ export default class CarService extends MongoService<Car> {
     const result = await this.model.read();
     return result;
   }
+
+  public async readOne(id: string): Promise<Car | ServiceError | null> {
+    /* const result = CarSchema.safeParse(id);
+    console.log('result ==>', result);
+
+    if (!result.success) {
+      return { error: result.error };
+    } */
+
+    return this.model.readOne(id);
+  }
 }
