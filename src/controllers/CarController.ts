@@ -20,7 +20,7 @@ export default class CarController extends MongoController<Car> {
 
   get route() { return this._route; }
 
-  create = async (
+  public create = async (
     req: RequestWithBody<Car>,
     res: Response<Car | ResponseError>,
   ): Promise<typeof res> => {

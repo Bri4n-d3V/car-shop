@@ -13,7 +13,7 @@ export class MongoService<T> {
     return result;
   }
 
-  public async read(): Promise<T[] | ServiceError | null> {
+  public async read(): Promise<T[] | ServiceError> {
     const result = await this.model.read();
     return result;
   }

@@ -16,4 +16,9 @@ export default class CarService extends MongoService<Car> {
 
     return this.model.create(obj);
   }
+
+  public async read(): Promise<Car[]> {
+    const result = await this.model.read();
+    return result;
+  }
 }
