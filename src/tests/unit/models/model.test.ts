@@ -19,7 +19,7 @@ describe('CarModel', (): void => {
   })
 
   describe('#read', (): void => {
-    before(() => Sinon.stub(carModel.model, 'find').resolves(carListMock));
+    before(() => Sinon.stub(carModel.model, 'find').resolves(carListMock as any));
 
     after((): void => Sinon.restore());
 
