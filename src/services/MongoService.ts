@@ -1,4 +1,5 @@
 import { ZodError } from 'zod';
+import { CarSchema } from '../interfaces/CarInterface';
 import MongoModel from '../models/MongoModel';
 
 export interface ServiceError {
@@ -9,8 +10,13 @@ export class MongoService<T> {
   constructor(public model: MongoModel<T>) {}
 
   public async create(obj: T): Promise<T | ServiceError | null> {
-    const result = await this.model.create(obj);
-    return result;
+    const result = CarSchema.safeParse(obj);
+
+    if (!result.success) {
+      return { error: result.error };
+    }
+
+    return this.model.create(obj);
   }
 
   public async read(): Promise<T[] | ServiceError> {

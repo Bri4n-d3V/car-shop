@@ -1,8 +1,8 @@
-import { Model as M, Document } from 'mongoose';
+import { Model as M } from 'mongoose';
 import { Model } from '../interfaces/ModelInterface';
 
 abstract class MongoModel<T> implements Model<T> {
-  constructor(protected model: M<T & Document>) { }
+  constructor(protected model: M<T>) { }
 
   public async create(obj: T): Promise<T> {
     const result = await this.model.create({ ...obj });
@@ -20,7 +20,7 @@ abstract class MongoModel<T> implements Model<T> {
   }
 
   public async update(id: string, obj: T): Promise<T | null> {
-    const result = await this.model.findByIdAndUpdate(id, obj);
+    const result = await this.model.findByIdAndUpdate(id, obj, { new: true });
     return result;
   }
 

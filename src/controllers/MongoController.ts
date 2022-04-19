@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Car } from '../interfaces/CarInterface';
 import { MongoService } from '../services/MongoService';
 
 export type ResponseError = {
@@ -14,6 +15,7 @@ enum ControllerErrors {
   notFound = 'Object not found',
   requiredId = 'Id is required',
   badRequest = 'Bad request',
+  idLength = 'Id must have 24 hexadecimal characters',
 }
 
 export abstract class MongoController<T> {
@@ -26,22 +28,20 @@ export abstract class MongoController<T> {
   public abstract create(
     req: RequestWithBody<T>,
     res: Response<T | ResponseError>,
-  ): Promise<typeof res | void>;
+  ): Promise<typeof res>;
 
-  public read = async (
+  public abstract read(
     _req: Request,
     res: Response<T[] | ResponseError>,
-  ): Promise<typeof res> => {
-    try {
-      const result = await this.service.read();
-      return res.json(result);
-    } catch (err) {
-      return res.status(500).json({ error: this.errors.internal });
-    }
-  };
+  ): Promise<typeof res>;
 
   public abstract readOne(
     req: Request<{ id: string }>,
-    res: Response<T | ResponseError | null>,
+    res: Response<T | ResponseError>,
+  ): Promise<typeof res>;
+
+  public abstract update(
+    req: Request<{ id: string, obj: Car }>,
+    res: Response<T | ResponseError>,
   ): Promise<typeof res>;
 }
