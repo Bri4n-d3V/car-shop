@@ -96,4 +96,25 @@ export default class CarController extends MongoController<Car> {
 
     return res.status(200).json(result);
   };
+
+  public delete = async (
+    req: Request<{ id: string }>,
+    res: Response<Car | ResponseError>,
+  ): Promise<typeof res> => {
+    const { id } = req.params;
+
+    if (id.length !== 24) {
+      return res.status(400).json({
+        error: this.errors.idLength,
+      });
+    }
+    
+    const result = await this.service.delete(id);
+
+    if (!result) {
+      return res.status(404).json({ error: this.errors.notFound });
+    }
+
+    return res.status(204).send();
+  };
 }

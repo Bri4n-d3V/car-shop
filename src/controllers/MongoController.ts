@@ -44,4 +44,9 @@ export abstract class MongoController<T> {
     req: Request<{ id: string, obj: Car }>,
     res: Response<T | ResponseError>,
   ): Promise<typeof res>;
+
+  public abstract delete(
+    req: Request<{ id: string }>,
+    res: Response<T | ResponseError>,
+  ): Promise<typeof res>;
 }
