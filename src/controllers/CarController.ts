@@ -25,24 +25,19 @@ export default class CarController extends MongoController<Car> {
     res: Response<Car | ResponseError>,
   ): Promise<typeof res> => {
     const { body } = req;
+    const result = await this.service.create(body);
 
-    try {
-      const result = await this.service.create(body);
-
-      if (!result) {
-        return res.status(500).json({ error: this.errors.internal });
-      }
-
-      if ('error' in result) {
-        const err = result.error.issues[0].message;
-
-        return res.status(400).json({ error: err });
-      }
-
-      return res.status(201).json(result);
-    } catch (err) {
+    if (!result) {
       return res.status(500).json({ error: this.errors.internal });
     }
+
+    if ('error' in result) {
+      const err = result.error.issues[0].message;
+
+      return res.status(400).json({ error: err });
+    }
+
+    return res.status(201).json(result);
   };
 
   public read = async (
@@ -51,7 +46,7 @@ export default class CarController extends MongoController<Car> {
   ): Promise<typeof res> => {
     try {
       const result = await this.service.read();
-      
+
       return res.json(result);
     } catch (err) {
       return res.status(500).json({ error: this.errors.internal });

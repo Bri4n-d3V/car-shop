@@ -41,4 +41,16 @@ describe('CarModel', (): void => {
       expect(car).to.be.deep.equal(carMock);
     })
   })
+
+  describe('#update', (): void => {
+    before(() => Sinon.stub(carModel.model, 'findByIdAndUpdate').resolves(carMock as any));
+
+    after((): void => Sinon.restore());
+
+    it('return the car with the updated values', async (): Promise<void> => {
+      const car = await carModel.update(carMock._id, carMock);
+
+      expect(car).to.be.deep.equal(carMock);
+    })
+  })
 })
