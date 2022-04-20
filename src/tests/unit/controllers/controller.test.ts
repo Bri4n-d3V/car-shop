@@ -90,7 +90,10 @@ describe('CarController', (): void => {
   })
 
   describe('#update', (): void => {
-    before(() => Sinon.stub(carModel.model, 'findByIdAndUpdate').resolves(carMock as any));
+    before(() =>
+      Sinon.stub(carModel.model, 'findByIdAndUpdate')
+        .onCall(0).resolves(carMock as any)
+        .onCall(1).resolves(null));
 
     after((): void => Sinon.restore());
 
@@ -100,5 +103,25 @@ describe('CarController', (): void => {
 
       expect(chaiHttpResponse.body).to.be.deep.equal(carMock);
     })
+
+    it('return error 400 due bad id request param', async (): Promise<void> => {
+      const chaiHttpResponse = await chai.request(app)
+        .put(`/cars/bad id`).send();
+
+      const error = {
+        "error": "Id must have 24 hexadecimal characters"
+      }
+
+      expect(chaiHttpResponse).to.have.status(400);
+      expect(chaiHttpResponse.body).to.be.deep.equal(error);
+    });
+
+    it('return error 400 due non-existent id request param', async (): Promise<void> => {
+      const chaiHttpResponse = await chai.request(app)
+        .put(`/cars/${carMock._id}`).send();
+
+      expect(chaiHttpResponse).to.have.status(404);
+      expect(chaiHttpResponse.body.error).to.be.equal('Object not found');
+    });
   })
 })
