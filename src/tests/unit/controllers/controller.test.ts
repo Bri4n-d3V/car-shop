@@ -124,4 +124,42 @@ describe('CarController', (): void => {
       expect(chaiHttpResponse.body.error).to.be.equal('Object not found');
     });
   })
+
+  describe('#delete', () => {
+    before(async () => {
+      Sinon.stub(carModel.model, 'findByIdAndDelete')
+        .onCall(0).resolves(carMock as any)
+        .onCall(1).resolves()
+    });
+
+    after((): void => Sinon.restore());
+
+    it('delete car (status 204 and no body return)', async (): Promise<void> => {
+      const chaiHttpResponse = await chai.request(app)
+        .delete(`/cars/${carMock._id}`).send();
+
+      expect(chaiHttpResponse).to.have.status(204);
+      expect(chaiHttpResponse.body).to.be.empty;
+    });
+
+    it('return error 400 due bad id request param', async (): Promise<void> => {
+      const chaiHttpResponse = await chai.request(app)
+        .delete(`/cars/bad id`).send();
+
+      const error = {
+        "error": "Id must have 24 hexadecimal characters"
+      }
+
+      expect(chaiHttpResponse).to.have.status(400);
+      expect(chaiHttpResponse.body).to.be.deep.equal(error);
+    });
+
+    it('return error 400 due non-existent id request param', async (): Promise<void> => {
+      const chaiHttpResponse = await chai.request(app)
+        .delete(`/cars/${carMock._id}`).send();
+
+      expect(chaiHttpResponse).to.have.status(404);
+      expect(chaiHttpResponse.body.error).to.be.equal('Object not found');
+    });
+  })
 })
