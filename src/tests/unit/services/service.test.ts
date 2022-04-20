@@ -59,4 +59,16 @@ describe('CarService', (): void => {
       expect(car).to.be.deep.equal(carMock);
     })
   })
+
+  describe('#delete', (): void => {
+    before(() => Sinon.stub(carService.model, 'delete').resolves(carMock as any));
+
+    after((): void => Sinon.restore());
+
+    it('the car is deleted', async (): Promise<void> => {
+      const car = await carService.delete(carMock._id);
+
+      expect(car).to.be.deep.equal(carMock);
+    })
+  })
 })
