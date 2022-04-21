@@ -7,7 +7,10 @@ describe('CarService', (): void => {
   let carService = new CarService();
 
   describe('#create', (): void => {
-    before(() => Sinon.stub(carService.model, 'create').resolves(carMock));
+    before(() =>
+      Sinon.stub(carService.model, 'create').
+        onCall(0).resolves(carMock)
+        .onCall(1).resolves());
 
     after((): void => Sinon.restore());
 
@@ -20,7 +23,7 @@ describe('CarService', (): void => {
     it('return the error message when bad request', async (): Promise<void> => {
       const car = await carService.create(badCarMock as any);
 
-      expect(car).to.not.be.equal(carMock);
+      expect(car).to.not.be.deep.equal(carMock);
     })
   })
 
