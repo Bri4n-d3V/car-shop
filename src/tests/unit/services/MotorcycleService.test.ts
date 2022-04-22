@@ -5,7 +5,7 @@ import MotorcycleService from '../../../services/MotorcycleService';
 import { badMotorcycleMock, motorcycleListMock, motorcycleMock } from '../mocks/MotorcycleMock';
 
 describe('MotorcycleService', (): void => {
-  let motorcycleService = new MotorcycleService();
+  const motorcycleService = new MotorcycleService();
 
   describe('#create', (): void => {
     before(() =>
