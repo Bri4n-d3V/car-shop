@@ -4,7 +4,7 @@ import CarService from '../../../services/CarService';
 import { carMock, carListMock, badCarMock } from '../mocks/CarMock';
 
 describe('CarService', (): void => {
-  let carService = new CarService();
+  const carService = new CarService();
 
   describe('#create', (): void => {
     before(() =>

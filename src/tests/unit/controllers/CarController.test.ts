@@ -13,8 +13,8 @@ chai.use(chaiHttp);
 const app = server.getApp();
 
 describe('CarController', (): void => {
-  let carModel = new CarModel();
-  let carService = new CarService(carModel);
+  const carModel = new CarModel();
+  const carService = new CarService(carModel);
   new CarController(carService);
 
   describe('#create', (): void => {

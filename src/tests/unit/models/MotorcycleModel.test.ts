@@ -5,7 +5,7 @@ import MotorcycleModel from '../../../models/MotorcycleModel';
 import { motorcycleListMock, motorcycleMock } from '../mocks/MotorcycleMock';
 
 describe('MotorcycleModel', (): void => {
-  let motorcycleModel = new MotorcycleModel();
+  const motorcycleModel = new MotorcycleModel();
 
   describe('#create', (): void => {
     before(() => Sinon.stub(motorcycleModel.model, 'create').resolves(motorcycleMock));
